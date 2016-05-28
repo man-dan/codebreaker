@@ -26,8 +26,9 @@ module Codebreaker
 
     def save_game(name)
       f = File.open("./db/records.txt","a+")
-      f<<"name:#{name}-turns:#{10-@turns}-hints:#{@hints}"
-      puts "The record was saved"
+      f<<"name:#{name}-turns:#{10-@turns}-hints:#{1-@hints}\n"
+      f.close
+      return "The record was saved"
     end
 
     def load_rec

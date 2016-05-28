@@ -56,5 +56,11 @@ module Codebreaker
         expect(game.hint).to eq("0 hints remain")
       end
     end
+
+    context "#files" do
+      it "save record" do
+        expect(game.save_game("Den")).to eq("The record was saved")
+      end
+    end
   end
 end
