@@ -13,8 +13,14 @@ module Codebreaker
       @turns -=1
       codes = @secret_code.chars.zip(guess.to_s.chars)
       mark<< '+' * codes.select {|x,y| x==y }.count
-      minus = codes.delete_if {|x,y| x==y }
-      mark<< '-' * (minus.transpose[0] & minus.transpose[1]).count unless minus.empty?
+      minus = codes.delete_if {|x,y| x==y }.transpose
+      return mark if minus.empty?
+      minus[0].each do |secret| 
+        unless (one_guess=minus[1].index(secret)).nil?
+            mark<<'-'
+            minus[1].delete_at(one_guess)
+        end
+      end
       mark
     end
 

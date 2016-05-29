@@ -19,11 +19,11 @@ module Codebreaker
 
     context "#check guess" do
       before do
-        game.instance_variable_set(:@secret_code,"1234")
+        game.instance_variable_set(:@secret_code,"1231")
       end
 
       it "game_result win" do
-        expect(game.check(1234)).to eq("++++")
+        expect(game.check(1231)).to eq("++++")
       end
 
       it "game_result not guessed" do
@@ -31,7 +31,27 @@ module Codebreaker
       end
 
       it "game_result not guessed positions" do
-        expect(game.check(2143)).to eq("----")
+        expect(game.check(2113)).to eq("----")
+      end
+
+      it "game_result half guessed" do
+        expect(game.check(1111)).to eq("++")
+      end
+
+      it "game_result half unguessed" do
+        expect(game.check(6116)).to eq("--")
+      end
+
+      it "game_result half+ && half-" do
+        expect(game.check(1321)).to eq("++--")
+      end
+
+       it "game_result +-" do
+        expect(game.check(6111)).to eq("+-")
+      end
+
+      it "game_result another_one unguessed" do
+        expect(game.check(6166)).to eq("-")
       end
 
       it "check - reduce turns" do
