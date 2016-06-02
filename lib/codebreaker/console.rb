@@ -19,34 +19,32 @@ module Codebreaker
           else
             guess.match(/^[1-6]{4}$/) ? check_guess(guess) :  "Uncorrect input\n".display
           end
-        end
+      end
     end
 
     def check_guess(guess)
       puts @game.check(guess)
       win(guess)
       lose(guess)
-      play_again if @game.game_process==false
+      return play_again unless @game.game_process
     end
 
     def win(guess)
-      if guess == @game.secret_code
-        @game.game_process=false
-        puts "You win! Press 's' if you want to save record"
-        @game.save_game(@name) if gets.chomp == "s"
-      end
+      return unless guess == @game.secret_code
+      @game.game_process=false
+      puts "You win! Press 's' if you want to save record"
+      @game.save_game(@name) if gets.chomp == "s"
     end
 
     def lose(guess)
-      if @game.turns == 0
-        @game.game_process=false
-        puts "You lose =("
-      end
+      return "Game over" unless @game.turns == 0
+      @game.game_process=false
+      puts "You lose =("
     end
 
     def play_again
       puts "Press 'p' if you want to play again"
-      Console.new.start if gets.chomp == "p"
+      Console.new.start if  gets.chomp == "p"
     end
   end
 end

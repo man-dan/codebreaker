@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Codebreaker
   RSpec.describe Game do
-    let(:game) { Game.new }
+    subject(:game) { Game.new }
     context "#init" do
       it "saves secret code" do
         expect(game.instance_variable_get(:@secret_code)).not_to be_empty
@@ -18,48 +18,26 @@ module Codebreaker
     end
 
     context "#check guess" do
-      before do
-        game.instance_variable_set(:@secret_code,"1231")
+      [
+        ['1234', '1234', '++++'],['1234', '1233', '+++'],
+        ['1111', '1215', '++'],  ['1234', '1111', '+'],
+        ['1234', '4246', '+-'],  ['1234', '1643', '+--'],
+        ['1234', '4132', '+---'],['1234', '6214', '++-'],
+        ['1234', '1243', '++--'],['1212', '2121', '----'],
+        ['1234', '3363', '-'],   ['1234', '6565', '']       
+      ].each do |variant|
+        it "secret_code - #{variant[0]}, guess - #{variant[1]}, marks - #{variant[2]}" do
+          game.instance_variable_set(:@secret_code, variant[0])
+          expect(game.send(:check, variant[1])).to eq(variant[2])
+        end
       end
-
-      it "game_result win" do
-        expect(game.check(1231)).to eq("++++")
-      end
-
-      it "game_result not guessed" do
-        expect(game.check(5656)).to eq("")
-      end
-
-      it "game_result not guessed positions" do
-        expect(game.check(2113)).to eq("----")
-      end
-
-      it "game_result half guessed" do
-        expect(game.check(1111)).to eq("++")
-      end
-
-      it "game_result half unguessed" do
-        expect(game.check(6116)).to eq("--")
-      end
-
-      it "game_result half+ && half-" do
-        expect(game.check(1321)).to eq("++--")
-      end
-
-       it "game_result +-" do
-        expect(game.check(6111)).to eq("+-")
-      end
-
-      it "game_result another_one unguessed" do
-        expect(game.check(6166)).to eq("-")
-      end
-
+      
       it "check - reduce turns" do
         game.check(2143)
         expect(game.instance_variable_get(:@turns)).to eq(9)
       end
     end
-
+    
     context "#hints" do
 
       it "reduce hints" do
